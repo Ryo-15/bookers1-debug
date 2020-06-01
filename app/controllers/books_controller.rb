@@ -15,6 +15,7 @@ class BooksController < ApplicationController
 
   # GET /books/1/edit
   def edit
+    @book = Book.find(params[:id])
   end
 
   # POST /books
@@ -22,8 +23,9 @@ class BooksController < ApplicationController
   def create
     @book = Book.new(book_params)
     if @book.save
-      redirect_to @book, notice: 'Book was successfully created.'
+      redirect_to book_path(@book), notice: 'Book was successfully created.'
     else
+      @books = Book.all
       render :index
     end
   end
@@ -31,8 +33,9 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1
   # PATCH/PUT /books/1.json
   def update
-    if @book.update()
-      redirect_to @book, notice: 'Book was successfully updated.'
+    @book = Book.find(params[:id])
+    if @book.update(book_params)
+      redirect_to book_path(@book), notice: 'Book was successfully updated.'
     else
       render :edit
     end
@@ -41,8 +44,9 @@ class BooksController < ApplicationController
   # DELETE /books/1
   # DELETE /books/1.json
   def destroy
-    @book.destroy
-    redirect_to books_url, notice: 'Book was successfully destroyed.'
+    book = Book.find(params[:id])
+    book.destroy
+    redirect_to books_path, notice: 'Book was successfully destroyed.'
   end
 
   private
